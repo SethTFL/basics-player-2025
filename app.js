@@ -222,13 +222,14 @@ const StyledRoot = styled.div`
 }
 `;
 
-/** @type {(props:{channel:string, interval:number})=>any} */
+/** @type {(props:{channel:string, interval:number, mock?:string})=>any} */
 const App = props =>
 {
     const [ListGet, ListSet] = useState(/** @type {Boxcast.Broadcast[]}*/([]));
     const [SelectedGet, SelectedSet] = useState(/** @type {string|null} */(null));
     const [LeadingGet, LeadingSet] = useState(/** @type {Boxcast.Broadcast|null} */(null));
     const [AlertGet, AlertSet] = useState(false);
+    const [UserClickGet, UserClickSet] = useState(false);
 
     /** @type {(inList:Array<Boxcast.Broadcast>)=>Array<Boxcast.Broadcast>} */
     const SortStart = (inList) => {
@@ -249,7 +250,7 @@ const App = props =>
         /** @type {()=>Promise<void>} */
         const Ping = async () =>
         {
-            const response = await fetch(`https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=50`);
+            const response = await fetch(props.mock ? props.mock : `https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=50`);
             /** @type {Array<Boxcast.BroadcastRaw>} */
             const json = await response.json();
             ListSet(SortStart(json));
@@ -267,13 +268,20 @@ const App = props =>
        let leading;
        for(let i=0; i<ListGet.length; i++)
        {
+            console.log(ListGet[i].name, ListGet[i].timeframe);
            if(ListGet[i].timeframe != "past")
            {
                leading = ListGet[i];
 
-               if( (leading.timeframe == "current" || leading.timeframe == "preroll") && (leading.id != LeadingGet?.id) && (SelectedGet != leading.id)) // if something is selected other than the leading event, alert the user
+               if(leading.timeframe == "current" || leading.timeframe == "preroll") // if something is selected other than the leading event, alert the user
                {
-                   AlertSet(true);
+                    if(leading.id != LeadingGet?.id)// is the leading item about to change?
+                    {
+                        if(leading.id != SelectedGet)
+                        {
+                            AlertSet(true);
+                        }
+                    }
                }
 
                if(SelectedGet == null) // if nothing is selected select the leading event
@@ -313,7 +321,11 @@ const App = props =>
         };
 
         Player.current?.loadChannel(props.channel, settings);
-        setTimeout(()=>ScrollToRef.current?.scrollIntoView({ behavior: "smooth" }), 500);
+        if(UserClickGet)
+        {
+            setTimeout(()=>ScrollToRef.current?.scrollIntoView({ behavior: "smooth" }), 500);
+            UserClickSet(false);
+        }
     }
     , [SelectedGet]);
 
@@ -322,6 +334,7 @@ const App = props =>
     const SelectionTransition = (inItem) => 
     {
         SelectedSet(inItem.id);
+        UserClickSet(true);
     };
 
     return html`
@@ -348,7 +361,7 @@ const App = props =>
         }
         </div>
         <div class=${`Boxcast-Alert ${ AlertGet ? " Show" : null }`}>
-            <span class="Close" onClick=${()=>{ AlertSet(false); }}>Dismiss âœ•</span>
+            <span class="Close" onClick=${()=>{ AlertSet(false); }}>Dismiss ×</span>
             <h4>A new session is starting:</h4>
             <p>${LeadingGet?.name}</p>
             <button onClick=${()=>{ LeadingGet&&SelectionTransition(LeadingGet); AlertSet(false); }}>Watch Now</button>
@@ -423,9 +436,9 @@ const DateParse = (inDateString) =>
     return obj;
 };
 
-/** @type {(inChannel:string, inSelector:string, inInterval:number)=>void} */
-export default (inChannel, inSelector, inInterval) => 
+/** @type {(inChannel:string, inSelector:string, inInterval:number, mock?:string)=>void} */
+export default (inChannel, inSelector, inInterval, mock) => 
 {
     const root = document.querySelector(inSelector);
-    root ? createRoot(root).render(h(App, {channel:inChannel, interval:inInterval})) : console.log(inSelector, "not found in dom");
+    root ? createRoot(root).render(h(App, {channel:inChannel, interval:inInterval, mock})) : console.log(inSelector, "not found in dom");
 };
