@@ -1,6 +1,3 @@
-// @ts-check
-/// <reference path="./app.d.ts"/>
-
 import 'https://js.boxcast.com/v3.min.js';
 import { html } from "https://esm.sh/htm@3.1.1/react";
 import styled from 'https://esm.sh/styled-components@5.3.10?deps=react@18.2.0';
@@ -225,8 +222,6 @@ const StyledRoot = styled.div`
 }
 `;
 
-const PlayerID = "boxcast-player";
-
 /** @type {(props:{channel:string, interval:number})=>any} */
 const App = props =>
 {
@@ -242,7 +237,9 @@ const App = props =>
         return inList;
     };
 
+    const PlayerID = "boxcast-player";
     const Player = useRef(/** @type {Boxcast.Player | null}*/(null));
+    const ScrollToRef = useRef(/** @type {HTMLElement | null} */(null));
 
     // on mount
     useEffect(()=>
@@ -316,6 +313,7 @@ const App = props =>
         };
 
         Player.current?.loadChannel(props.channel, settings);
+        setTimeout(()=>ScrollToRef.current?.scrollIntoView({ behavior: "smooth" }), 500);
     }
     , [SelectedGet]);
 
@@ -324,13 +322,11 @@ const App = props =>
     const SelectionTransition = (inItem) => 
     {
         SelectedSet(inItem.id);
-        document.documentElement.style.scrollBehavior = "smooth";
-        setTimeout(()=>window.location.hash = "#"+PlayerID, 300);
     };
 
     return html`
     <${StyledRoot}>
-        <div class="Boxcast-Upper">
+        <div class="Boxcast-Upper" ref=${ScrollToRef}>
             <div class="Boxcast-Player" id=${PlayerID}></div>
             <div class="Boxcast-Active">
                 <h2>${ ListGet.filter( item=>item.id == SelectedGet )[0]?.name }</h2>
@@ -428,4 +424,8 @@ const DateParse = (inDateString) =>
 };
 
 /** @type {(inChannel:string, inSelector:string, inInterval:number)=>void} */
-export default (inChannel, inSelector, inInterval) => createRoot(document.querySelector(inSelector)).render(h(App, {channel:inChannel, interval:inInterval}));
+export default (inChannel, inSelector, inInterval) => 
+{
+    const root = document.querySelector(inSelector);
+    root ? createRoot(root).render(h(App, {channel:inChannel, interval:inInterval})) : console.log(inSelector, "not found in dom");
+};

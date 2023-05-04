@@ -1,5 +1,10 @@
 {
-    "compilerOptions": {"lib": ["DOM", "deno.window"]},
+    "compilerOptions":
+    {
+        "types": ["*.d.ts"],
+        "checkJs":true,
+        "lib": ["DOM", "deno.window"]
+    },
     "tasks":
     {
         "dev": "deno run -A --unstable https://deno.land/std@0.181.0/http/file_server.ts"
