@@ -1,8 +1,8 @@
 import 'https://js.boxcast.com/v3.min.js';
 import { html } from "https://esm.sh/htm@3.1.1/react";
-import styled from 'https://esm.sh/styled-components@5.3.10?deps=react@18.2.0';
-import { createElement as h, useState, useEffect, useRef } from "https://esm.sh/react@18.2.0";
-import { createRoot } from "https://esm.sh/react-dom@18.2.0/client";
+import styled from 'https://esm.sh/v118/styled-components@5.3.10';
+import { createElement as h, useState, useEffect, useRef } from "https://esm.sh/v118/react@18.2.0";
+import { createRoot } from "https://esm.sh/v118/react-dom@18.2.0/client";
 
 const StyledRoot = styled.div`
 .Boxcast-Upper
