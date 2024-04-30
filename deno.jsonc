@@ -7,6 +7,6 @@
     },
     "tasks":
     {
-        "dev": "deno run -A --unstable https://deno.land/std@0.181.0/http/file_server.ts"
+        "dev": "deno run -A --no-lock https://deno.land/std@0.181.0/http/file_server.ts"
     }
 }

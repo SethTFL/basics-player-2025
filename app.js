@@ -268,7 +268,6 @@ const App = props =>
        let leading;
        for(let i=0; i<ListGet.length; i++)
        {
-            console.log(ListGet[i].name, ListGet[i].timeframe);
            if(ListGet[i].timeframe != "past")
            {
                leading = ListGet[i];
@@ -440,5 +439,5 @@ const DateParse = (inDateString) =>
 export default (inChannel, inSelector, inInterval, mock) => 
 {
     const root = document.querySelector(inSelector);
-    root ? createRoot(root).render(h(App, {channel:inChannel, interval:inInterval, mock})) : console.log(inSelector, "not found in dom");
+    root ? createRoot(root).render(h(App, {channel:inChannel, interval:inInterval, mock})) : console.log(inSelector, "not found, cannot build player.");
 };
