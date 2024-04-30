@@ -316,8 +316,11 @@ const App = props =>
             showCountdown: true,
             showRelated: false,
             autoplay: true,
-            defaultVideo: "next"
+            defaultVideo: "next",
+            onPlayerStateChanged:/** @type {Boxcast.PlayerHandler} */(state, details)=>{ console.log(state, details);}
         };
+
+        globalThis.player = Player.current;
 
         Player.current?.loadChannel(props.channel, settings);
         if(UserClickGet)

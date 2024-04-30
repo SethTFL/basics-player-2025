@@ -26,7 +26,8 @@ declare namespace Boxcast
     type Broadcast = BroadcastRaw&{start:Date};
 
     type PlayerConstructor =  (inID:string)=> Player;
-    type Player = {loadChannel:(inID:string, inSettings:Record<string, string|boolean|number|null>)=>void}
+    type PlayerHandler = (state:string, details:Record<string, string>)=>void
+    type Player = {loadChannel:(inID:string, inSettings:Record<string, string|boolean|number|null|PlayerHandler>)=>void}
 }
 
 declare const boxcast:Boxcast.PlayerConstructor;
