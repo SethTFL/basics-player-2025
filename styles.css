@@ -38,6 +38,18 @@
     }
 }
 
+#transcript
+{
+    display: block;
+    width: 100%;
+    height: 300px;
+    max-width: 600px;
+    border: 0;
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
 .Boxcast-Playlist
 {
     max-width: 550px;

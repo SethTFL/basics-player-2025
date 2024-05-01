@@ -3,7 +3,7 @@ import { html } from "https://esm.sh/htm@3.1.1/react";
 import { createElement as h, useState, useEffect, useRef } from "https://esm.sh/v118/react@18.2.0";
 import { createRoot } from "https://esm.sh/v118/react-dom@18.2.0/client";
 
-/** @type {(props:{channel:string, interval:number, mock?:string})=>any} */
+/** @type {(props:{channel:string, interval:number, transcriptURL?:string, mockURL?:string})=>any} */
 const App = props =>
 {
     const [ListGet, ListSet] = useState(/** @type {Boxcast.Broadcast[]}*/([]));
@@ -31,7 +31,7 @@ const App = props =>
         /** @type {()=>Promise<void>} */
         const Ping = async () =>
         {
-            const response = await fetch(props.mock ? props.mock : `https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=50`);
+            const response = await fetch(props.mockURL ? props.mockURL : `https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=50`);
             /** @type {Array<Boxcast.BroadcastRaw>} */
             const json = await response.json();
             ListSet(SortStart(json));
@@ -120,13 +120,16 @@ const App = props =>
         UserClickSet(true);
     };
 
+    const selected = ListGet.find((item)=>item.id == SelectedGet);
+
     return html`
     <div>
         <div class="Boxcast-Upper" ref=${ScrollToRef}>
             <div class="Boxcast-Player" id=${PlayerID}></div>
             <div class="Boxcast-Active">
-                <h2>${ ListGet.filter( item=>item.id == SelectedGet )[0]?.name }</h2>
+                <h2>${ selected?.name }</h2>
             </div>
+                ${ (selected?.timeframe == "current" && props.transcriptURL) && h("iframe", {id:"transcript", src:props.transcriptURL}) }
         </div>
         <div class="Boxcast-Playlist">
         ${
@@ -219,8 +222,8 @@ const DateParse = (inDateString) =>
     return obj;
 };
 
-/** @type {(inChannel:string, inSelector:string, inInterval:number, mock?:string)=>void} */
-export default (inChannel, inSelector, inInterval, mock) => 
+/** @type {(inChannel:string, inSelector:string, inInterval:number, transcriptURL?:string, mockURL?:string)=>void} */
+export default (inChannel, inSelector, inInterval, transcriptURL="https://truthforlife.m.spf.io/ze/688Qm?embedSubtitleMode=true&presetSubtitleFontSize=16px", mockURL) => 
 {
     const root = document.querySelector(inSelector);
     if(root)
@@ -252,7 +255,7 @@ export default (inChannel, inSelector, inInterval, mock) =>
         
         const appRoot = document.createElement("div");
         root.appendChild(appRoot);
-        createRoot(appRoot).render(h(App, {channel:inChannel, interval:inInterval, mock}));
+        createRoot(appRoot).render(h(App, {channel:inChannel, interval:inInterval, transcriptURL, mockURL}));
     }
     else
     {
