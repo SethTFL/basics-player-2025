@@ -1,228 +1,9 @@
 import 'https://js.boxcast.com/v3.min.js';
 import { html } from "https://esm.sh/htm@3.1.1/react";
-import styled from 'https://esm.sh/v118/styled-components@5.3.10';
 import { createElement as h, useState, useEffect, useRef } from "https://esm.sh/v118/react@18.2.0";
 import { createRoot } from "https://esm.sh/v118/react-dom@18.2.0/client";
 
-const StyledRoot = styled.div`
-.Boxcast-Upper
-{
-    background: white;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-
-    .Boxcast-Player
-    {
-        .boxcast-well-container
-        {
-            display: none;
-        }
-        .boxcast-well
-        {
-            display:flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px 10px;
-            min-height: 10px;
-            margin: 0;
-
-            & > span, .boxcast-linkback
-            {
-                display:none;
-            }
-
-            & > *
-            {
-                margin: 0;
-            }
-        }
-    }
-    .Boxcast-Active
-    {
-        text-align: center;
-        padding:20px;
-        background: white;
-        & > * { margin: 0; }
-    }
-}
-
-.Boxcast-Playlist
-{
-    max-width: 550px;
-    margin: 30px auto;
-
-    .Partition
-    {
-        margin: 30px 0 0 0;
-        padding: 0 0 8px 0;
-        border-bottom: 1px solid #dddddd;
-        text-align: center;
-    }
-    .Broadcast
-    {
-        position: relative;
-        display: flex;
-        padding: 5px 0 5px 0;
-
-        & > *
-        {
-            box-sizing: border-box;
-            padding: 5px;
-        }
-
-        .Pointer
-        {
-            width: 75px;
-            text-align: right;
-            .Badge
-            {
-                display: inline-block;
-                border-radius: 20px;
-                padding: 2px 8px;
-                font-size: 12px;
-                font-weight: 900;
-                font-family: sans-serif;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                text-align: center;
-
-                &.Next
-                {
-                    background: yellow;
-                    color: black;
-                }
-                &.Soon
-                {
-                    background: orange;
-                    color: white;
-                }
-                &.Live
-                {
-                    background: red;
-                    color: white;
-                }
-            }
-        }
-        .Time
-        {
-            width: 80px;
-            font-size: 16px;
-            text-align: right;
-        }
-        .Title
-        {
-            flex: 1;
-            font-weight: 900;
-        }
-        .Control
-        {
-            width: 100px;
-
-        }
-
-        button
-        {
-            position: relative;
-            appearance: none;
-            display: block;
-            width: 100%;
-            max-width:150px;
-            padding: 5px 10px 5px 10px;
-            background: #0e2a3f;
-            cursor: pointer;
-            border: none;
-            color: white;
-            font-family: sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.4s;
-        }
-        button:hover
-        {
-            border-radius: 50px;
-        }
-        button[disabled]
-        {
-            border-radius: 50px;
-            background: red !important;
-        }
-
-        &.future button
-        {
-            background: #c3b7a9;
-        }
-
-        @media(max-width:500px)
-        {
-            flex-wrap: wrap;
-            .Time
-            {
-                order: 0;
-                width: 30%;
-            }
-            .Title
-            {
-                order: 1;
-                flex: none;
-                width: 60%;
-            }
-            .Pointer
-            {
-                order: 2;
-                width: 30%;
-            }
-            .Control
-            {
-                order: 3;
-                width: 60%;
-            }
-        }
-    }
-}
-
-.Boxcast-Alert
-{
-    position: fixed;
-    right: 20px;
-    bottom: -300px;
-    width: 300px;
-    padding: 20px 0 40px 0;
-    background: #333;
-    border-radius: 5px;
-    transition: bottom 0.4s;
-    color: #fff;
-    text-align: center;
-
-    &.Show
-    {
-        bottom: 20px;
-    }
-
-    button
-    {
-        padding: 5px 15px;
-        border: none;
-        background: white;
-        cursor: pointer;
-        font-weight: 900;
-    }
-
-    .Close
-    {
-        display: inline-block;
-        position: absolute;
-        padding: 5px 10px 5px 10px;
-        border-radius: 20px;
-        border: 3px solid white;
-        top: -20px;
-        right: 10px;
-        background: #000000;
-        cursor: pointer;
-        color: #fff;
-    }
-}
-`;
-
-/** @type {(props:{channel:string, interval:number, mock?:string})=>any} */
+/** @type {(props:{channel:string, interval:number, transcriptURL?:string, mockURL?:string})=>any} */
 const App = props =>
 {
     const [ListGet, ListSet] = useState(/** @type {Boxcast.Broadcast[]}*/([]));
@@ -250,7 +31,7 @@ const App = props =>
         /** @type {()=>Promise<void>} */
         const Ping = async () =>
         {
-            const response = await fetch(props.mock ? props.mock : `https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=50`);
+            const response = await fetch(props.mockURL ? props.mockURL : `https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=50`);
             /** @type {Array<Boxcast.BroadcastRaw>} */
             const json = await response.json();
             ListSet(SortStart(json));
@@ -339,13 +120,16 @@ const App = props =>
         UserClickSet(true);
     };
 
+    const selected = ListGet.find((item)=>item.id == SelectedGet);
+
     return html`
-    <${StyledRoot}>
+    <div>
         <div class="Boxcast-Upper" ref=${ScrollToRef}>
             <div class="Boxcast-Player" id=${PlayerID}></div>
             <div class="Boxcast-Active">
-                <h2>${ ListGet.filter( item=>item.id == SelectedGet )[0]?.name }</h2>
+                <h2>${ selected?.name }</h2>
             </div>
+                ${ (selected?.timeframe == "current" && props.transcriptURL) && h("iframe", {id:"transcript", src:props.transcriptURL}) }
         </div>
         <div class="Boxcast-Playlist">
         ${
@@ -368,7 +152,7 @@ const App = props =>
             <p>${LeadingGet?.name}</p>
             <button onClick=${()=>{ LeadingGet&&SelectionTransition(LeadingGet); AlertSet(false); }}>Watch Now</button>
         </div>
-    <//>
+    </div>
     `;
 }
 
@@ -438,9 +222,43 @@ const DateParse = (inDateString) =>
     return obj;
 };
 
-/** @type {(inChannel:string, inSelector:string, inInterval:number, mock?:string)=>void} */
-export default (inChannel, inSelector, inInterval, mock) => 
+/** @type {(inChannel:string, inSelector:string, inInterval:number, transcriptURL?:string, mockURL?:string)=>void} */
+export default (inChannel, inSelector, inInterval, transcriptURL="https://truthforlife.m.spf.io/ze/688Qm?embedSubtitleMode=true&presetSubtitleFontSize=16px", mockURL) => 
 {
     const root = document.querySelector(inSelector);
-    root ? createRoot(root).render(h(App, {channel:inChannel, interval:inInterval, mock})) : console.log(inSelector, "not found, cannot build player.");
+    if(root)
+    {
+        /*
+        const shadow = root.attachShadow({mode:"open"});
+        
+        const styles = document.createElement("link");
+        styles.setAttribute("rel", "stylesheet");
+        styles.setAttribute("type", "text/css");
+        styles.setAttribute("href", import.meta.resolve("./styles.css"));
+        shadow.appendChild(styles);
+        
+        const boxcastRoot = document.createElement("div");
+        boxcastRoot.id = "boxcast-player"
+        shadow.appendChild(boxcastRoot);
+        const boxcastPlayer = boxcast(`#${boxcastRoot.id}`);
+
+        const appRoot = document.createElement("div");
+        shadow.appendChild(appRoot);
+        createRoot(appRoot).render(h(App, {channel:inChannel, interval:inInterval, mock}));
+        */
+
+        const styles = document.createElement("link");
+        styles.setAttribute("rel", "stylesheet");
+        styles.setAttribute("type", "text/css");
+        styles.setAttribute("href", import.meta.resolve("./styles.css"));
+        root.appendChild(styles);
+        
+        const appRoot = document.createElement("div");
+        root.appendChild(appRoot);
+        createRoot(appRoot).render(h(App, {channel:inChannel, interval:inInterval, transcriptURL, mockURL}));
+    }
+    else
+    {
+        console.warn(inSelector, "not found, cannot build player.");
+    }
 };
