@@ -1,0 +1,215 @@
+.Boxcast-Upper
+{
+    background: white;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+
+    .Boxcast-Player
+    {
+        .boxcast-well-container
+        {
+            display: none;
+        }
+        .boxcast-well
+        {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px 10px;
+            min-height: 10px;
+            margin: 0;
+
+            & > span, .boxcast-linkback
+            {
+                display:none;
+            }
+
+            & > *
+            {
+                margin: 0;
+            }
+        }
+    }
+    .Boxcast-Active
+    {
+        text-align: center;
+        padding:20px;
+        background: white;
+        & > * { margin: 0; }
+    }
+}
+
+.Boxcast-Playlist
+{
+    max-width: 550px;
+    margin: 30px auto;
+
+    .Partition
+    {
+        margin: 30px 0 0 0;
+        padding: 0 0 8px 0;
+        border-bottom: 1px solid #dddddd;
+        text-align: center;
+    }
+    .Broadcast
+    {
+        position: relative;
+        display: flex;
+        padding: 5px 0 5px 0;
+
+        & > *
+        {
+            box-sizing: border-box;
+            padding: 5px;
+        }
+
+        .Pointer
+        {
+            width: 75px;
+            text-align: right;
+            .Badge
+            {
+                display: inline-block;
+                border-radius: 20px;
+                padding: 2px 8px;
+                font-size: 12px;
+                font-weight: 900;
+                font-family: sans-serif;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                text-align: center;
+
+                &.Next
+                {
+                    background: yellow;
+                    color: black;
+                }
+                &.Soon
+                {
+                    background: orange;
+                    color: white;
+                }
+                &.Live
+                {
+                    background: red;
+                    color: white;
+                }
+            }
+        }
+        .Time
+        {
+            width: 80px;
+            font-size: 16px;
+            text-align: right;
+        }
+        .Title
+        {
+            flex: 1;
+            font-weight: 900;
+        }
+        .Control
+        {
+            width: 100px;
+
+        }
+
+        button
+        {
+            position: relative;
+            appearance: none;
+            display: block;
+            width: 100%;
+            max-width:150px;
+            padding: 5px 10px 5px 10px;
+            background: #0e2a3f;
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.4s;
+        }
+        button:hover
+        {
+            border-radius: 50px;
+        }
+        button[disabled]
+        {
+            border-radius: 50px;
+            background: red !important;
+        }
+
+        &.future button
+        {
+            background: #c3b7a9;
+        }
+
+        @media(max-width:500px)
+        {
+            flex-wrap: wrap;
+            .Time
+            {
+                order: 0;
+                width: 30%;
+            }
+            .Title
+            {
+                order: 1;
+                flex: none;
+                width: 60%;
+            }
+            .Pointer
+            {
+                order: 2;
+                width: 30%;
+            }
+            .Control
+            {
+                order: 3;
+                width: 60%;
+            }
+        }
+    }
+}
+
+.Boxcast-Alert
+{
+    position: fixed;
+    right: 20px;
+    bottom: -300px;
+    width: 300px;
+    padding: 20px 0 40px 0;
+    background: #333;
+    border-radius: 5px;
+    transition: bottom 0.4s;
+    color: #fff;
+    text-align: center;
+
+    &.Show
+    {
+        bottom: 20px;
+    }
+
+    button
+    {
+        padding: 5px 15px;
+        border: none;
+        background: white;
+        cursor: pointer;
+        font-weight: 900;
+    }
+
+    .Close
+    {
+        display: inline-block;
+        position: absolute;
+        padding: 5px 10px 5px 10px;
+        border-radius: 20px;
+        border: 3px solid white;
+        top: -20px;
+        right: 10px;
+        background: #000000;
+        cursor: pointer;
+        color: #fff;
+    }
+}
