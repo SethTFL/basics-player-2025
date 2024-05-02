@@ -18,6 +18,7 @@
     </style>
     <div id="boxcast"></div>
     <script type="module">
+
         import Player from "./app.js";
 
         const Channel =
@@ -28,7 +29,17 @@
                 Sunday: "gzahmhugrzogttfdtbjj",
                    Dev: "r3os2zfdnhlquhuypgtp"
         };
-        Player(Channel.Basics2023, "#boxcast", 5000, "https://truthforlife.m.spf.io/ze/688Qm?embedSubtitleMode=true&presetSubtitleFontSize=16px");
+
+        const SPFIO = {
+            langs:{"Italiano":"it", "Français":"fr", "Nederlands":"nl"},
+            events:([
+                ["7FbPa", "7FbPa", "7FbPa"],
+                ["9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o"],
+                ["8X4X8", "8X4X8"]
+            ]).flat()
+        };
+
+        Player(Channel.Dev, "#boxcast", 5000, SPFIO);
     </script>
 </body>
 </html>

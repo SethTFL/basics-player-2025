@@ -31,3 +31,11 @@ declare namespace Boxcast
 }
 
 declare const boxcast:Boxcast.PlayerConstructor;
+
+declare namespace Theo
+{
+    type Config = {
+        langs: Record<string, string>,
+        events: string[]
+    };
+}

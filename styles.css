@@ -1,3 +1,47 @@
+#spfio
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .lang-menu
+    {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        .lang
+        {
+            appearance:unset;
+            border: none;
+            padding:5px 10px;
+            border-radius: 10px;
+            background: #333333;
+            color:white;
+            cursor: pointer;
+            
+            &.active
+            {
+                background:red;
+                color: white;
+            }
+        }
+    }
+
+    iframe
+    {
+        display:block;
+        width:100%;
+        max-width: 500px;
+        height: 150px;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+}
+
 .Boxcast-Upper
 {
     background: white;
