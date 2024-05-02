@@ -5,6 +5,8 @@
     align-items: center;
     gap: 10px;
 
+    padding-bottom: 20px;
+
     .lang-menu
     {
         display: flex;
@@ -35,10 +37,9 @@
         display:block;
         width:100%;
         max-width: 500px;
-        height: 150px;
+        height: 90px;
         border: none;
         border-radius: 5px;
-        margin-bottom: 20px;
     }
 
 }

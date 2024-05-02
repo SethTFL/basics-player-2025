@@ -207,7 +207,7 @@ const SPFIOWidget =(props)=>
 {
     const langList = Object.entries(props.langs);
 
-    const [langGet, langSet] = useState(langList?.[0]?.[1] || "");
+    const [langGet, langSet] = useState("");
 
     const buttons = langList.map(([key, value])=>{
         return h("button", {className:`lang ${langGet == value ? "active" : ""}`, onClick(){langSet(value)}}, key)
@@ -215,7 +215,7 @@ const SPFIOWidget =(props)=>
 
     return h("div", {id:"spfio"}, [
         h("div", {className:"lang-menu"}, buttons),
-        h("iframe", {src:`https://truthforlife.m.spf.io/ze/${props.event}?embedSubtitleMode=true&channel=${langGet}&presetSubtitleFontSize=16px`})
+        langGet && h("iframe", {src:`https://truthforlife.m.spf.io/ze/${props.event}?embedSubtitleMode=true&channel=${langGet}&presetSubtitleFontSize=20px`})
     ])
 }
 
