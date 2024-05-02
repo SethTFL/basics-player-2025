@@ -205,9 +205,11 @@ const BroadcastItem = ({item, previous, priority, selected, select}) =>
 /** @type {(props:{event:string, langs:Record<string, string>})=>React.ReactNode} */
 const SPFIOWidget =(props)=>
 {
-    const [langGet, langSet] = useState("it");
+    const langList = Object.entries(props.langs);
 
-    const buttons = Object.entries(props.langs).map(([key, value])=>{
+    const [langGet, langSet] = useState(langList?.[0]?.[1] || "");
+
+    const buttons = langList.map(([key, value])=>{
         return h("button", {className:`lang ${langGet == value ? "active" : ""}`, onClick(){langSet(value)}}, key)
     });
 

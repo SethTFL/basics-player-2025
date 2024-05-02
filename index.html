@@ -31,22 +31,32 @@
         };
 
         const SPFIO = {
-            langs:{
-                "Italiano":"it",
-                "Français":"fr",
-                "Nederlands":"nl",
-                "Português": "pt",
-                "Español": "es",
-                "Deutsch": "de"
+            Dev:{
+                langs:{
+                    "English": "en",
+                    "Español": "es",
+                },
+                events:["7uceQ", "7uceQ", "7uceQ", "7uceQ", "7uceQ"]
             },
-            events:([
-                ["7FbPa", "7FbPa", "7FbPa"],
-                ["9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o"],
-                ["8X4X8", "8X4X8"]
-            ]).flat()
+            Live:{
+                langs:{
+                    "Italiano": "it",
+                    "Français": "fr",
+                    "Nederlands": "nl",
+                    "Português": "pt",
+                    "Español": "es",
+                    "Deutsch": "de"
+                },
+                events:([
+                    ["7FbPa", "7FbPa", "7FbPa"],
+                    ["9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o"],
+                    ["8X4X8", "8X4X8"]
+                ]).flat()
+            }
+
         };
 
-        Player(Channel.Dev, "#boxcast", 5000, SPFIO);
+        Player(Channel.Dev, "#boxcast", 5000, SPFIO.Dev);
     </script>
 </body>
 </html>
