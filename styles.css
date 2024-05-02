@@ -52,7 +52,7 @@
 
 .Boxcast-Playlist
 {
-    max-width: 550px;
+    max-width: 650px;
     margin: 30px auto;
 
     .Partition
@@ -82,8 +82,8 @@
             {
                 display: inline-block;
                 border-radius: 20px;
-                padding: 2px 8px;
-                font-size: 12px;
+                padding: 2px 0 2px 2px;
+                font-size: 10px;
                 font-weight: 900;
                 font-family: sans-serif;
                 letter-spacing: 0.1em;
@@ -105,17 +105,17 @@
                 &.Next::before
                 {
                     background: yellow;
-                    color: black;
+                    box-shadow: 0px 0px 5px yellow;
                 }
                 &.Soon::before
                 {
                     background: orange;
-                    color: white;
+                    box-shadow: 0px 0px 5px orange;
                 }
                 &.Live::before
                 {
                     background: red;
-                    color: white;
+                    box-shadow: 0px 0px 5px red;
                 }
             }
         }
