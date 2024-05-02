@@ -110,7 +110,7 @@ const App = props =>
             UserClickSet(false);
         }
     }
-    , [SelectedGet]);
+    , [SelectedGet, UserClickGet]);
 
 
     /** @type {(inItem:Boxcast.Broadcast)=>void} */
@@ -186,7 +186,7 @@ const BroadcastItem = ({item, previous, priority, selected, select}) =>
         <div class="Time">${item.start.Hours}:${item.start.Minutes} ${item.start.M}</div>
         <div class="Title">${item.name}</strong>
         <div class="Control">
-            <button onClick=${select} disabled=${selected}>${buttonText}</button>
+            <button onClick=${select} disabled=${selected}>${selected ? "Watching" : buttonText}</button>
         </div>
         <div class="Pointer">${ pointerText }</div>
     </div>`;

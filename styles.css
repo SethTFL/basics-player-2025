@@ -90,17 +90,29 @@
                 text-transform: uppercase;
                 text-align: center;
 
-                &.Next
+                color: #777;
+
+                &::before
+                {
+                    content: " ";
+                    display:inline-block;
+                    width:8px;
+                    height:8px;
+                    border-radius: 8px;
+                    margin-right:5px;
+                }
+
+                &.Next::before
                 {
                     background: yellow;
                     color: black;
                 }
-                &.Soon
+                &.Soon::before
                 {
                     background: orange;
                     color: white;
                 }
-                &.Live
+                &.Live::before
                 {
                     background: red;
                     color: white;
