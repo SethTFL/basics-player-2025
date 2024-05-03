@@ -210,11 +210,11 @@ const SPFIOWidget =(props)=>
     const [langGet, langSet] = useState("");
 
     const buttons = langList.map(([key, value])=>{
-        return h("button", {className:`lang ${langGet == value ? "active" : ""}`, onClick(){langSet(value)}}, key)
+        return h("button", {className:`lang ${langGet == value ? "active" : ""}`, onClick(){langSet(langGet == value ? "" : value)}}, key)
     });
 
     return h("div", {id:"spfio"}, [
-        h("div", {className:"lang-menu"}, buttons),
+        h("div", {className:`lang-menu ${langGet ? "match" : ""}`}, buttons),
         langGet && h("iframe", {src:`https://truthforlife.m.spf.io/ze/${props.event}?embedSubtitleMode=true&channel=${langGet}&presetSubtitleFontSize=20px`})
     ])
 }

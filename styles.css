@@ -14,20 +14,30 @@
         justify-content: center;
         flex-wrap: wrap;
         gap: 10px;
+
         .lang
         {
             appearance:unset;
             border: none;
             padding:5px 10px;
-            border-radius: 10px;
-            background: #333333;
+            border-radius: 5px;
+            background: black;
             color:white;
             cursor: pointer;
-            
-            &.active
+        }
+
+        &.match
+        {
+            .lang
             {
-                background:red;
-                color: white;
+                background: #e1e1e1;
+                color:rgb(40, 40, 40);
+                
+                &.active
+                {
+                    background: black;
+                    color:white;
+                }
             }
         }
     }
@@ -36,7 +46,7 @@
     {
         display:block;
         width:100%;
-        max-width: 500px;
+        max-width: 650px;
         height: 90px;
         border: none;
         border-radius: 5px;
