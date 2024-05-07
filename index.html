@@ -41,6 +41,7 @@
                     "Deutsch": "de",
                     "English": "en",
                 },
+                delay: 45,
                 events:["7uceQ", "7uceQ", "7uceQ",
                         "688Qm", "688Qm", "688Qm", "688Qm", "688Qm"]
             },
@@ -53,6 +54,7 @@
                     "Español": "es",
                     "Deutsch": "de"
                 },
+                delay: 45,
                 events:([
                     ["7FbPa", "7FbPa", "7FbPa"],
                     ["9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o", "9zn6o"],
@@ -62,7 +64,7 @@
 
         };
 
-        Player(Channel.Dev, "#boxcast", 5000, SPFIO.Dev);
+        Player(Channel.Dev, "#boxcast", 5000, SPFIO.Dev, "./mock.json");
     </script>
 </body>
 </html>

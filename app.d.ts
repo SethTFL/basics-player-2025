@@ -36,6 +36,7 @@ declare namespace Theo
 {
     type Config = {
         langs: Record<string, string>,
-        events: string[]
+        events: string[],
+        delay?: number
     };
 }

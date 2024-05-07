@@ -128,8 +128,7 @@ const App = props =>
     if(selectedLive && props.spfio)
     {
         const event = props.spfio.events[selectedIndex];
-        const langs = props.spfio.langs;
-        spfioWidget = h(SPFIOWidget, {event, langs});
+        spfioWidget = h(SPFIOWidget, {event, langs:props.spfio.langs, delay:props.spfio.delay});
     }
 
     return html`
@@ -202,12 +201,52 @@ const BroadcastItem = ({item, previous, priority, selected, select}) =>
     </div>`;
 };
 
-/** @type {(props:{event:string, langs:Record<string, string>})=>React.ReactNode} */
+/** @type {(props:{event:string, langs:Record<string, string>, delay?:number})=>React.ReactNode} */
 const SPFIOWidget =(props)=>
 {
     const langList = Object.entries(props.langs);
 
     const [langGet, langSet] = useState("");
+
+    const timer = React.useRef(0);
+    const timerRender = React.useRef(/** @type {null|HTMLElement}*/(null));
+    const timerCount = React.useRef(0);
+    React.useEffect(()=>{
+
+        if(!props.delay){return;}
+
+        if(langGet != "")
+        {
+            console.log("lang change");
+
+            timerCount.current = props.delay;
+            if(timerRender.current)
+            {
+                timerRender.current.style.display = "block";
+            }
+            if(timer.current)
+            {
+                clearInterval(timer.current)
+            }
+            timer.current = setInterval(()=>{
+                timerCount.current--;
+                if(timerCount.current < 0)
+                {
+                    clearInterval(timer.current);
+                }
+                if(timerRender.current)
+                {
+                    if(timerCount.current < 0){
+                        timerRender.current.style.display = "none";
+                    }
+                    else{
+                        timerRender.current.innerHTML = `Please wait ${timerCount.current} seconds.`;
+                    }
+                }
+
+            }, 1000);
+        }
+    }, [langGet])
 
     const buttons = langList.map(([key, value])=>{
         return h("button", {className:`lang ${langGet == value ? "active" : ""}`, onClick(){langSet(langGet == value ? "" : value)}}, key)
@@ -215,7 +254,8 @@ const SPFIOWidget =(props)=>
 
     return h("div", {id:"spfio"}, [
         h("div", {className:`lang-menu ${langGet ? "match" : ""}`}, buttons),
-        langGet && h("iframe", {src:`https://truthforlife.m.spf.io/ze/${props.event}?embedSubtitleMode=true&channel=${langGet}&presetSubtitleFontSize=20px`})
+        (langGet && props.delay) && h("p", { ref:timerRender, id:"delay-indicator", style:{display:"none"}}),
+        langGet && h("iframe", {src:`https://truthforlife.m.spf.io/ze/${props.event}?embedSubtitleMode=true&channel=${langGet}&presetSubtitleFontSize=20px`}),
     ])
 }
 
