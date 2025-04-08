@@ -1,5 +1,4 @@
 import 'https://js.boxcast.com/v3.min.js';
-import { html } from "https://esm.sh/htm@3.1.1/react";
 import React, { createElement as h, useState, useEffect, useRef } from "https://esm.sh/v118/react@18.2.0";
 import { createRoot } from "https://esm.sh/v118/react-dom@18.2.0/client";
 
@@ -131,38 +130,33 @@ const App = props =>
         spfioWidget = h(SPFIOWidget, {event, langs:props.spfio.langs, delay:props.spfio.delay});
     }
 
-    return html`
-    <div>
-        <div class="Boxcast-Upper" ref=${ScrollToRef}>
-            <div class="Boxcast-Player" id=${PlayerID}></div>
-            <div class="Boxcast-Active">
-                <h2>${ selected?.name }</h2>
-            </div>
-            ${ spfioWidget }
-        </div>
-        <div class="Boxcast-Playlist">
-        ${
-            ListGet.map( (item, index) =>
-            {
-                return h(BroadcastItem,
-                {
+    return h("div", {}, [
+        h("div", { className: "Boxcast-Upper", ref: ScrollToRef }, [
+            h("div", { className: "Boxcast-Player", id: PlayerID }),
+            h("div", { className: "Boxcast-Active" }, [
+                h("h2", {}, selected?.name)
+            ]),
+            spfioWidget
+        ]),
+        h("div", { className: "Boxcast-Playlist" }, 
+            ListGet.map((item, index) =>
+                h(BroadcastItem, {
                     item: item,
-                    previous: ListGet[index-1],
+                    previous: ListGet[index - 1],
                     priority: item.id == LeadingGet?.id,
                     selected: item.id == SelectedGet,
                     select: () => SelectionTransition(item)
-                });
-            })
-        }
-        </div>
-        <div class=${`Boxcast-Alert ${ AlertGet ? " Show" : null }`}>
-            <span class="Close" onClick=${()=>{ AlertSet(false); }}>Dismiss ×</span>
-            <h4>A new session is starting:</h4>
-            <p>${LeadingGet?.name}</p>
-            <button onClick=${()=>{ LeadingGet&&SelectionTransition(LeadingGet); AlertSet(false); }}>Watch Now</button>
-        </div>
-    </div>
-    `;
+                })
+            )
+        ),
+        h("div", { className: `Boxcast-Alert ${AlertGet ? "Show" : ""}` }, [
+            h("span", { className: "Close", onClick: () => { AlertSet(false); } }, "Dismiss ×"),
+            h("h4", {}, "A new session is starting:"),
+            h("p", {}, LeadingGet?.name),
+            h("button", { onClick: () => { LeadingGet && SelectionTransition(LeadingGet); AlertSet(false); } }, "Watch Now")
+        ])
+    ]);
+
 }
 
 /** @type {(props:{item:Boxcast.Broadcast, previous: false | Boxcast.Broadcast,  priority:boolean, selected:boolean, select:()=>void})=>any} */
@@ -170,17 +164,17 @@ const BroadcastItem = ({item, previous, priority, selected, select}) =>
 {
     // pointer
     let pointerText;
-    if (priority){ pointerText = html`<div class="Badge Next">Next</div>`; }
-    if(item.timeframe == "preroll"){ pointerText = html`<div class="Badge Soon">Soon</div>`; }
-    if(item.timeframe == "current"){ pointerText = html`<div class="Badge Live">Live</div>`; }
+    if (priority){ pointerText = h("div", {class:"Badge Next"}, "Next") }
+    if(item.timeframe == "preroll"){ pointerText = h("div", {class:"Badge Soon"}, "Soon") }
+    if(item.timeframe == "current"){ pointerText = h("div", {class:"Badge Live"}, "Live") }
 
     // (date) partition
     let partition;
     if(!previous || (previous.start.Date !== item.start.Date))
     {
-        partition = html`<h3 class="Partition" key=${item.id+item.start.Day} >
-            ${item.start.Day}, ${item.start.Month} ${item.start.Date}
-        </h3>`;
+        partition = h("h3", {class:"Partition", key:item.id+item.start.Day},
+            `${item.start.Day}, ${item.start.Month} ${item.start.Date}` 
+        )
     }
 
     // button
@@ -189,16 +183,17 @@ const BroadcastItem = ({item, previous, priority, selected, select}) =>
     if(item.timeframe == "current" || item.timeframe == "preroll"){ buttonText = "Watch"; }
     if(item.timeframe == "future"){ buttonText = "Preview"; }
 
-    return html`
-    ${ partition }
-    <div class=${`Broadcast ${item.timeframe}`} key=${item.id}>
-        <div class="Time">${item.start.Hours}:${item.start.Minutes} ${item.start.M}</div>
-        <div class="Title">${item.name}</strong>
-        <div class="Control">
-            <button onClick=${select} disabled=${selected}>${selected ? "Watching" : buttonText}</button>
-        </div>
-        <div class="Pointer">${ pointerText }</div>
-    </div>`;
+    return h("div", {}, 
+        partition,
+        h("div", { className: `Broadcast ${item.timeframe}`, key: item.id }, [
+            h("div", { className: "Time" }, `${item.start.Hours}:${item.start.Minutes} ${item.start.M}`),
+            h("div", { className: "Title" }, item.name),
+            h("div", { className: "Control" }, [
+                h("button", { onClick: select, disabled: selected }, selected ? "Watching" : buttonText)
+            ]),
+            h("div", { className: "Pointer" }, pointerText)
+        ])
+    );
 };
 
 /** @type {(props:{event:string, langs:Record<string, string>, delay?:number})=>React.ReactNode} */
