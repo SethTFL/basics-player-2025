@@ -1,7 +1,7 @@
 {
     "compilerOptions":
     {
-        "types": ["*.d.ts"],
+        "types": ["app.d.ts"],
         "checkJs":true,
         "lib": ["DOM", "deno.window"]
     },

@@ -1,6 +1,6 @@
 import 'https://js.boxcast.com/v3.min.js';
-import React, { createElement as h, useState, useEffect, useRef } from "https://esm.sh/v118/react@18.2.0";
-import { createRoot } from "https://esm.sh/v118/react-dom@18.2.0/client";
+
+import React, { createElement as h, useState, useEffect, useRef, render } from "./bundle-preact.js";
 
 /** @type {(props:{channel:string, interval:number, spfio?:Theo.Config, mockURL?:string})=>any} */
 const App = props =>
@@ -188,9 +188,9 @@ const BroadcastItem = ({item, previous, priority, selected, select}) =>
         h("div", { className: `Broadcast ${item.timeframe}`, key: item.id }, [
             h("div", { className: "Time" }, `${item.start.Hours}:${item.start.Minutes} ${item.start.M}`),
             h("div", { className: "Title" }, item.name),
-            h("div", { className: "Control" }, [
+            h("div", { className: "Control" },
                 h("button", { onClick: select, disabled: selected }, selected ? "Watching" : buttonText)
-            ]),
+            ),
             h("div", { className: "Pointer" }, pointerText)
         ])
     );
@@ -317,7 +317,7 @@ export default (inChannel, inSelector, inInterval, inSPFIO, mockURL) =>
         
         const appRoot = document.createElement("div");
         root.appendChild(appRoot);
-        createRoot(appRoot).render(h(App, {channel:inChannel, interval:inInterval, spfio:inSPFIO, mockURL}));
+        render(h(App, {channel:inChannel, interval:inInterval, spfio:inSPFIO, mockURL}), appRoot)
     }
     else
     {
