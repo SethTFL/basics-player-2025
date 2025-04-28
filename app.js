@@ -1,4 +1,5 @@
 import 'https://js.boxcast.com/v3.min.js';
+//import 'https://js.dev.boxcast.com/v3.min.js';
 
 import React, { createElement as h, useState, useEffect, useRef, render } from "./bundle-preact.js";
 
@@ -30,11 +31,17 @@ const App = props =>
         /** @type {()=>Promise<void>} */
         const Ping = async () =>
         {
-            const response = await fetch(props.mockURL ? props.mockURL : `https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=50`);
+            const response = await fetch(props.mockURL ? props.mockURL : `https://rest.boxcast.com/channels/${props.channel}/broadcasts?l=500`);
             /** @type {Array<Boxcast.BroadcastRaw>} */
             const json = await response.json();
             ListSet(SortStart(json));
+            console.log(Player.current);
+            
+            //const pollVideo = Player.current._el.querySelector("video");
+            //console.log("video?", pollVideo?.textTracks);
         };
+
+        console.log("MOUNT", Player.current);
 
         Ping();
         const timer = setInterval(Ping, props.interval);
@@ -97,7 +104,8 @@ const App = props =>
             showRelated: false,
             autoplay: true,
             defaultVideo: "next",
-            onPlayerStateChanged:/** @type {Boxcast.PlayerHandler} */(state, details)=>{ console.log(state, details);}
+            onPlayerStateChanged:/** @type {Boxcast.PlayerHandler} */(state, details)=>{ console.log("CHANGE", state, details);},
+            //env:"dev"
         };
 
         globalThis.player = Player.current;
