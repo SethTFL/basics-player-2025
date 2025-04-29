@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Here's the demo stylesheet: -->
+  <title>Embed test</title>
+  <style>
+    button[data-active='true']
+    {
+      background:black;
+      color:white;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Here's your BoxCast embed: -->
+  <div data-boxcast id="boxcast-widget-box-26cbbd-test-j5gegj1pocsssban9wj4"></div>
+
+
+  <script src="./test-basics.js" type="module"></script>
+
+
+  <script type="text/javascript" charset="utf-8">
+  (function(d, s, c, o)
+  {
+    var js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
+    js.src = '//js.dev.boxcast.com/v3.min.js';
+    js.onload = function()
+    {
+      boxcast.noConflict()('#boxcast-widget-'+c).loadChannel(c, o);
+    };
+    js.charset = 'utf-8';
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'box-26cbbd-test-j5gegj1pocsssban9wj4',
+  {
+    "showTitle":0,
+    "showDescription":0,
+    "showHighlights":0,
+    "showRelated":false,
+    "defaultVideo":"next",
+    "playInline":false,
+    "dvr":true,
+    "market":"internal",
+    "showCountdown":true,
+    "showDonations":false,
+    "showDocuments":false,
+    "showIndex":false,
+    "showChat":false,
+    "hidePreBroadcastTextOverlay":false,
+    "env":"dev"
+  }));
+  </script>
+
+
+
+</body>
+
+</html>
