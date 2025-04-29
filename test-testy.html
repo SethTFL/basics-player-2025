@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Here's the demo stylesheet: -->
+  <link rel="stylesheet" href="test.css">
+  <title>Embed test</title>
+</head>
+
+<body>
+  <!-- Here was the original test widget in the staging environment:
+  <div id="boxcast-widget-box-26cbbd-test-j5gegj1pocsssban9wj4"></div>
+  <script type="text/javascript" charset="utf-8">
+(function(d, s, c, o)
+{
+    var js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
+    js.src = '//js.dev.boxcast.com/v3.min.js';
+    js.onload = function()
+    {
+        boxcast.noConflict()('#boxcast-widget-'+c).loadChannel(c, o);
+    };
+    js.charset = 'utf-8';
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'box-26cbbd-test-j5gegj1pocsssban9wj4',
+{
+    "showTitle":0,
+    "showDescription":0,
+    "showHighlights":0,
+    "showRelated":false,
+    "defaultVideo":"next",
+    "playInline":false,
+    "dvr":true,
+    "market":"internal",
+    "showCountdown":true,
+    "showDonations":false,
+    "showDocuments":false,
+    "showIndex":false,
+    "showChat":false,
+    "hidePreBroadcastTextOverlay":false,
+    "env":"dev"
+}));</script> -->
+
+  <!-- Here is the test from 10:30am Sunday, Apr 27:-->
+  <div id="boxcast-widget-parkside-church-morning-service-1030-knu2fd4bo9lzvxt0w8dn"></div>
+  <script type="text/javascript" charset="utf-8">
+  (function(d, s, c, o)
+  {
+    var js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
+    js.src = '//js.boxcast.com/v3.min.js';
+    js.onload = function()
+    {
+      boxcast.noConflict()('#boxcast-widget-'+c).loadChannel(c, o);
+    };
+    js.charset = 'utf-8';
+    fjs.parentNode.insertBefore(js, fjs);
+  }
+  (document, 'script', 'parkside-church-morning-service-1030-knu2fd4bo9lzvxt0w8dn', {"showTitle":0,"showDescription":0,"showHighlights":0,"showRelated":false,"defaultVideo":"next","playInline":false,"dvr":true,"market":"house-of-worship","showCountdown":false,"showDonations":false,"showDocuments":false,"showIndex":false,"showChat":false,"hidePreBroadcastTextOverlay":false}));</script>
+
+
+  <!-- Here is the embed for Parkside's Basics channel: -->
+  <!-- <div id="boxcast-widget-ge1oexq9fqtppbm6mm8d"></div><script type="text/javascript" charset="utf-8">(function(d, s, c, o) {var js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];js.src = '//js.boxcast.com/v3.min.js';js.onload = function() { boxcast.noConflict()('#boxcast-widget-'+c).loadChannel(c, o); };js.charset = 'utf-8';fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'ge1oexq9fqtppbm6mm8d', {"showTitle":0,"showDescription":0,"showHighlights":0,"showRelated":false,"defaultVideo":"next","playInline":false,"dvr":true,"market":"house-of-worship","showCountdown":false,"showDonations":false,"showDocuments":false,"showIndex":false,"showChat":false,"hidePreBroadcastTextOverlay":false}));</script> -->
+
+  <!-- Here's the demo language selection stuff: -->
+  <script type="text/javascript" charset="utf-8" src="test.js"></script>
+
+  <!-- Here are the language buttons; please use the data-captions-language data item with the
+  language key, as well as the caption-button and caption-button-hidden classes to start. The JS
+  will unhide whatever buttons have languages available. -->
+  <div>
+    <button data-captions-language="en" class="caption-button caption-button-hidden">English</button>
+    <button data-captions-language="es" class="caption-button caption-button-hidden">Español</button>
+    <button data-captions-language="pt" class="caption-button caption-button-hidden">Português</button>
+    <button data-captions-language="fr" class="caption-button caption-button-hidden">Français</button>
+    <button data-captions-language="uk" class="caption-button caption-button-hidden">Українська</button>
+    <button data-captions-language="ru" class="caption-button caption-button-hidden">Русский</button>
+    <button data-captions-language="ko" class="caption-button caption-button-hidden">한국어</button>
+    <button data-captions-language="zh-hans" class="caption-button caption-button-hidden">简体中文</button>
+    <button data-captions-language="ar" class="caption-button caption-button-hidden">اَلْعَرَبِيَّةُ</button>
+  </div>
+</body>
+
+</html>

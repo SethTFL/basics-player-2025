@@ -59,6 +59,31 @@
     background: white;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 
+    .languages
+    {
+        display: flex;
+        gap: 1rem;
+        padding: 2rem;
+        justify-content: center;
+
+        & button
+        {
+            appearance:unset;
+            border: none;
+            padding:5px 10px;
+            border-radius: 5px;
+            background: black;
+            color:white;
+            cursor: pointer;
+
+            &.active
+            {
+                background: #e1e1e1;
+                color:rgb(40, 40, 40);
+            }
+        }
+    }
+
     .Boxcast-Player
     {
         .boxcast-well-container
@@ -192,7 +217,7 @@
 
         }
 
-        button
+        & button
         {
             position: relative;
             appearance: none;
@@ -209,11 +234,11 @@
             font-weight: 600;
             transition: all 0.4s;
         }
-        button:hover
+        & button:hover
         {
             border-radius: 50px;
         }
-        button[disabled]
+        & button[disabled]
         {
             border-radius: 50px;
             background: red !important;
@@ -270,7 +295,7 @@
         bottom: 20px;
     }
 
-    button
+    & button
     {
         padding: 5px 15px;
         border: none;

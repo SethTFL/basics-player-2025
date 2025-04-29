@@ -1,0 +1,6 @@
+{
+  "version": "4",
+  "remote": {
+    "https://js.dev.boxcast.com/v3.min.js": "8a215e92e6473de999f556a03d27e9f08efbd02b476166a20943963835ff7fd7"
+  }
+}

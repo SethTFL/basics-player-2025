@@ -3,30 +3,37 @@ const BUTTONS = document.createElement("div");
 document.body.append(BUTTONS);
 let TRACKS = /** @type {TextTrack[]} */([]);
 
-const handlerTrack =()=> TRACKS.forEach( (t, i)=>BUTTONS.children[i].setAttribute("data-active", TRACKS[i].mode ));
+
+/** @typedef {[label:string, on:boolean]} TrackWrap */
+
+
+const SetState =()=>{
+    /** @type {TrackWrap} */
+    const trackState = TRACKS.map(t=>[t.label, t.mode == "showing"]);
+
+    // mock rendering
+    BUTTONS.innerHTML = "";
+    trackState.forEach((t, i)=>
+    {
+        const button = document.createElement("button");
+        button.innerText = t[0];
+        button.addEventListener("click", ()=>pick(i));
+        button.setAttribute("data-active", t[1]);
+        BUTTONS.append(button);    
+    });
+}
 
 const scan =()=>
 {
     const video = ROOT.querySelector('video');
     TRACKS = Array.from(video?.textTracks);
 
-    BUTTONS.innerHTML = "";
-    TRACKS.forEach((t, i)=>
-    {
-        const button = document.createElement("button");
-        button.innerText = TRACKS[i].label;
-        button.addEventListener("click", ()=>pick(i));
-        BUTTONS.append(button);        
-    })
-
     if(video?.textTracks)
     {
-        ROOT.querySelector("[data-cc-controls]")?.remove();
-        video.textTracks.removeEventListener("change", handlerTrack);
-        video.textTracks.addEventListener("change", handlerTrack);
-        handlerTrack();
+        video.textTracks.removeEventListener("change", SetState);
+        video.textTracks.addEventListener("change", SetState);
+        SetState();
     }
-
 };
 
 /** @type {(index:number)=>void} */
@@ -34,6 +41,11 @@ const pick =(index)=>
 {
     index = TRACKS[index].mode == "showing" ? -1 : index;
     TRACKS.forEach( (t, i)=>TRACKS[i].mode = (i==index) ? "showing" : "disabled" );
+    SetState();
+
+    ROOT.querySelectorAll('i.boxcast-cc-checked').forEach(c=>c.classList.remove("boxcast-icon-check"));
+    ROOT.querySelector(`[data-cc-${index === -1 ? 'disable-captions' : `enable-caption-id-${index}`}-checked]`)?.classList.add('boxcast-icon-check');
+    ROOT.querySelector("button[data-cc-button]")?.classList[index !== -1 ? "add" : "remove"]("enabled");
 }
 
 globalThis.scan = scan;
