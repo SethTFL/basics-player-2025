@@ -27,7 +27,7 @@ declare namespace Boxcast
 
     type PlayerConstructor =  (inID:string)=> Player;
     type PlayerHandler = (state:"play"|"seek"|"stop"|"ended"|"error"|"buffering"|"dvr", details:Record<string, string>)=>void
-    type Player = {loadChannel:(inID:string, inSettings:Record<string, string|boolean|number|null|PlayerHandler>)=>void}
+    type Player = {_el:Element, loadChannel:(inID:string, inSettings:Record<string, string|boolean|number|null|PlayerHandler>)=>void}
 }
 
 declare const boxcast:Boxcast.PlayerConstructor;

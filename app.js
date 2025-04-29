@@ -1,14 +1,9 @@
 import 'https://js.boxcast.com/v3.min.js';
-//import 'https://js.dev.boxcast.com/v3.min.js';
 
 import React, { createElement as h, useState, useEffect, useRef, render } from "./bundle-preact.js";
 
-/** @type {Element} */
-let ROOT;
-let TRACKS = /** @type {TextTrack[]} */([]);
 
-
-/** @type {(props:{channel:string, interval:number, spfio?:Theo.Config, mockURL?:string})=>any} */
+/** @type {(props:{channel:string, interval:number, mockURL?:string})=>any} */
 const App = props =>
 {
     const [ListGet, ListSet] = useState(/** @type {Boxcast.Broadcast[]}*/([]));
@@ -30,19 +25,21 @@ const App = props =>
 
     /////////////////////////////////////////////////////////////////////////////
 
+    const TRACKS = React.useRef(/** @type {TextTrack[]} */([]));
+
     /** @typedef {[label:string, on:boolean]} TrackWrap */
 
     const [TracksGet, TracksSet] = React.useState(/** @type {TrackWrap[]} */([]));
 
     const updateTrackState =()=>
     {
-        TracksSet(TRACKS.map(t=>[t.label, t.mode == "showing"]));
+        TracksSet(TRACKS.current.map(t=>[t.label, t.mode == "showing"]));
     }
 
     const scan =()=>
     {
-        const video = ROOT.querySelector('video');
-        TRACKS = video?.textTracks ? Array.from(video.textTracks) : [];
+        const video = Player.current?._el.querySelector('video');
+        TRACKS.current = video?.textTracks ? Array.from(video.textTracks) : [];
     
         if(video?.textTracks)
         {
@@ -55,13 +52,13 @@ const App = props =>
     /** @type {(index:number)=>void} */
     const pick =(index)=>
     {
-        index = TRACKS[index].mode == "showing" ? -1 : index;
-        TRACKS.forEach( (t, i)=>TRACKS[i].mode = (i==index) ? "showing" : "disabled" );
+        index = TRACKS.current[index].mode == "showing" ? -1 : index;
+        TRACKS.current.forEach( (t, i)=>TRACKS.current[i].mode = (i==index) ? "showing" : "disabled" );
         updateTrackState();
     
-        ROOT.querySelectorAll('i.boxcast-cc-checked').forEach(c=>c.classList.remove("boxcast-icon-check"));
-        ROOT.querySelector(`[data-cc-${index === -1 ? 'disable-captions' : `enable-caption-id-${index}`}-checked]`)?.classList.add('boxcast-icon-check');
-        ROOT.querySelector("button[data-cc-button]")?.classList[index !== -1 ? "add" : "remove"]("enabled");
+        Player.current?._el.querySelectorAll('i.boxcast-cc-checked').forEach(c=>c.classList.remove("boxcast-icon-check"));
+        Player.current?._el.querySelector(`[data-cc-${index === -1 ? 'disable-captions' : `enable-caption-id-${index}`}-checked]`)?.classList.add('boxcast-icon-check');
+        Player.current?._el.querySelector("button[data-cc-button]")?.classList[index !== -1 ? "add" : "remove"]("enabled");
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -78,7 +75,7 @@ const App = props =>
             /** @type {Array<Boxcast.BroadcastRaw>} */
             const json = await response.json();
             ListSet(SortStart(json));
-            console.log(Player.current);
+            //console.log(Player.current);
             
             scan();
         };
@@ -148,7 +145,6 @@ const App = props =>
             autoplay: true,
             defaultVideo: "next",
             onPlayerStateChanged:/** @type {Boxcast.PlayerHandler} */(state, details)=>{ console.log("CHANGE", state, details);},
-            //env:"dev"
         };
 
         globalThis.player = Player.current;
@@ -172,7 +168,6 @@ const App = props =>
 
     const selectedIndex = ListGet.findIndex((item)=>item.id == SelectedGet);
     const selected = ListGet[selectedIndex]; // we need the index of the boxcat event to lookup the index of the spfio event
-    const selectedLive = selected?.timeframe == "current" || selected?.timeframe == "preroll";
 
     return h("div", {}, [
         h("div", { className: "Boxcast-Upper", ref: ScrollToRef }, [
@@ -276,13 +271,12 @@ const DateParse = (inDateString) =>
     return obj;
 };
 
-/** @type {(inChannel:string, inSelector:string, inInterval:number, inSPFIO?:Theo.Config, mockURL?:string)=>void} */
-export default (inChannel, inSelector, inInterval, inSPFIO, mockURL) => 
+/** @type {(inChannel:string, inSelector:string, inInterval:number, mockURL?:string)=>void} */
+export default (inChannel, inSelector, inInterval, mockURL) => 
 {
     const root = document.querySelector(inSelector);
     if(root)
     {
-        ROOT = root;
         const styles = document.createElement("link");
         styles.setAttribute("rel", "stylesheet");
         styles.setAttribute("type", "text/css");
@@ -291,10 +285,10 @@ export default (inChannel, inSelector, inInterval, inSPFIO, mockURL) =>
         
         const appRoot = document.createElement("div");
         root.appendChild(appRoot);
-        render(h(App, {channel:inChannel, interval:inInterval, spfio:inSPFIO, mockURL}), appRoot)
+        render(h(App, {channel:inChannel, interval:inInterval, mockURL}), appRoot)
     }
     else
     {
-        console.warn(inSelector, "not found, cannot build player.");
+        console.warn("root element", inSelector, "not found, cannot build player.");
     }
 };

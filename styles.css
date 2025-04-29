@@ -1,59 +1,3 @@
-#spfio
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-
-    padding-bottom: 20px;
-
-    .lang-menu
-    {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-
-        .lang
-        {
-            appearance:unset;
-            border: none;
-            padding:5px 10px;
-            border-radius: 5px;
-            background: black;
-            color:white;
-            cursor: pointer;
-        }
-
-        &.match
-        {
-            .lang
-            {
-                background: #e1e1e1;
-                color:rgb(40, 40, 40);
-                
-                &.active
-                {
-                    background: black;
-                    color:white;
-                }
-            }
-        }
-    }
-
-    iframe
-    {
-        display:block;
-        width:100%;
-        max-width: 650px;
-        height: 90px;
-        border: none;
-        border-radius: 5px;
-    }
-
-}
-
 .Boxcast-Upper
 {
     background: white;
@@ -62,6 +6,8 @@
     .languages
     {
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         gap: 1rem;
         padding: 2rem;
         justify-content: center;
@@ -78,8 +24,9 @@
 
             &.active
             {
-                background: #e1e1e1;
+                background: white;
                 color:rgb(40, 40, 40);
+                outline: 4px solid black;
             }
         }
     }
@@ -117,18 +64,6 @@
         background: white;
         & > * { margin: 0; }
     }
-}
-
-#transcript
-{
-    display: block;
-    width: 100%;
-    height: 300px;
-    max-width: 600px;
-    border: 0;
-    border-radius: 5px;
-    margin: 0 auto;
-    padding: 10px;
 }
 
 .Boxcast-Playlist
