@@ -2,7 +2,6 @@ import 'https://js.boxcast.com/v3.min.js';
 
 import React, { createElement as h, useState, useEffect, useRef, render } from "./bundle-preact.js";
 
-
 /** @type {(props:{channel:string, interval:number, mockURL?:string})=>any} */
 const App = props =>
 {
@@ -30,30 +29,25 @@ const App = props =>
     /** @typedef {[label:string, on:boolean]} TrackWrap */
 
     const [TracksGet, TracksSet] = React.useState(/** @type {TrackWrap[]} */([]));
-
-    const updateTrackState =()=>
-    {
-        TracksSet(TRACKS.current.map(t=>[t.label, t.mode == "showing"]));
+    const updateTrackState =()=>{
+        let showing = -1;
+        TracksSet(TRACKS.current.map((t, i)=>
+            {
+                const mode = t.mode == "showing";
+                mode && (showing = i);
+                return [t.label, mode];
+            })
+        );
+        return showing;
     }
-
-    const scan =()=>
-    {
-        const video = Player.current?._el.querySelector('video');
-        TRACKS.current = video?.textTracks ? Array.from(video.textTracks) : [];
-    
-        if(video?.textTracks)
-        {
-            video.textTracks.removeEventListener("change", updateTrackState);
-            video.textTracks.addEventListener("change", updateTrackState);
-            updateTrackState();
-        }
-    };
     
     /** @type {(index:number)=>void} */
     const pick =(index)=>
     {
         index = TRACKS.current[index].mode == "showing" ? -1 : index;
-        TRACKS.current.forEach( (t, i)=>TRACKS.current[i].mode = (i==index) ? "showing" : "disabled" );
+        TRACKS.current.forEach( (t, i)=>{
+            TRACKS.current[i].mode = (i==index) ? "showing" : "disabled"
+        } );
         updateTrackState();
     
         Player.current?._el.querySelectorAll('i.boxcast-cc-checked').forEach(c=>c.classList.remove("boxcast-icon-check"));
@@ -75,17 +69,30 @@ const App = props =>
             /** @type {Array<Boxcast.BroadcastRaw>} */
             const json = await response.json();
             ListSet(SortStart(json));
-            //console.log(Player.current);
-            
-            scan();
         };
-
-        console.log("MOUNT", Player.current);
-
         Ping();
-        const timer = setInterval(Ping, props.interval);
-        return ()=>clearInterval(timer);
+        const timerPing = setInterval(Ping, props.interval);
+        
+
+        const Scan =()=>
+        {
+            const video = Player.current?._el.querySelector('video');
+            TRACKS.current = video?.textTracks ? Array.from(video.textTracks) : [];
+        
+            if(video?.textTracks)
+            {
+                video.textTracks.removeEventListener("change", updateTrackState);
+                video.textTracks.addEventListener("change", updateTrackState);
+            }
+            updateTrackState();
+        };
+        const timerScan = setInterval(Scan, 500);
+
+
+        return ()=>{clearInterval(timerPing); clearInterval(timerScan);}
+
     }
+    
     , []);
 
    // on new list
@@ -135,7 +142,6 @@ const App = props =>
     // on new video selected
     useEffect(()=>
     {
-        console.log("new video select")
         const settings = {
             selectedBroadcastId: SelectedGet,
             showTitle: true,
@@ -170,13 +176,17 @@ const App = props =>
     const selectedIndex = ListGet.findIndex((item)=>item.id == SelectedGet);
     const selected = ListGet[selectedIndex]; // we need the index of the boxcat event to lookup the index of the spfio event
 
+    const pending = selected && (selected.timeframe == "preroll" || selected.timeframe == "future");
+
     return h("div", {}, [
         h("div", { className: "Boxcast-Upper", ref: ScrollToRef }, [
             h("div", { className: "Boxcast-Player", id: PlayerID }),
             h("div", { className: "Boxcast-Active" }, [
                 h("h2", {}, selected?.name)
             ]),
-            h("div", {class:"languages"}, TracksGet.map((t, i)=>h("button",
+            
+            h("div", {class:"languages"}, pending ? h("em", null, `Captions will be available in:
+            English  Español  Português  Français  Українська  Русский  한국어  简体中文  العربية `) : TracksGet.map((t, i)=>h("button",
                 {
                     onClick:()=>pick(i),
                     className: t[1] ? "active" : "",
