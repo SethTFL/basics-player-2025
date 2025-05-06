@@ -144,6 +144,7 @@ const App = props =>
             showRelated: false,
             autoplay: true,
             defaultVideo: "next",
+            playInline:true,
             onPlayerStateChanged:/** @type {Boxcast.PlayerHandler} */(state, details)=>{ console.log("CHANGE", state, details);},
         };
 
